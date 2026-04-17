@@ -14,6 +14,7 @@
             --border: rgba(88, 166, 255, 0.4);
             --card-bg: rgba(13, 17, 23, 0.94);
             --nytrox-red: #ff003c;
+            --venom-purple: #9d00ff;
         }
 
         * { box-sizing: border-box; scroll-behavior: smooth; }
@@ -119,10 +120,12 @@
             transform: translateY(-2px); 
         }
 
-        /* Nytrox specific styling */
-        .nytrox-btn { border: 2px solid var(--nytrox-red) !important; position: relative; }
-        .nytrox-btn::after { content: "BREACH_PROTOCOL"; position: absolute; top: 5px; right: 5px; font-size: 8px; color: var(--nytrox-red); opacity: 0.6; }
-        .nytrox-btn:hover { box-shadow: 0 0 25px var(--nytrox-red) !important; }
+        /* Custom Project Glows */
+        .nytrox-btn { border: 2px solid var(--nytrox-red) !important; }
+        .nytrox-btn:hover { box-shadow: 0 0 25px var(--nytrox-red) !important; background: rgba(255, 0, 60, 0.05) !important; }
+        
+        .venom-btn { border: 2px solid var(--venom-purple) !important; }
+        .venom-btn:hover { box-shadow: 0 0 25px var(--venom-purple) !important; background: rgba(157, 0, 255, 0.05) !important; }
 
         .tag {
             font-size: 0.75em;
@@ -195,7 +198,7 @@
                 <iframe src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=5205682" 
                     style="border:none; width: 100%; height: 85px; filter: drop-shadow(0 0 5px var(--accent)) contrast(1.1);">
                 </iframe>
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03)); background-size: 100% 2px, 3px 100%; pointer-events: none;"></div>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); background-size: 100% 2px, 3px 100%; pointer-events: none;"></div>
             </div>
 
             <div id="social-bar" class="socials" style="opacity:0; transition: opacity 1s;">
@@ -218,15 +221,16 @@
             <h2 id="projects-title"></h2>
             <div class="grid-layout">
                 <a href="nytroxrat.html" class="item-card writeup-btn nytrox-btn">
-                    <span class="tag" style="color: var(--nytrox-red);">[ STATUS: ACTIVE ]</span>
-                    <strong>NYTROXRAT_v1.1</strong>
+                    <span class="tag" style="color: var(--nytrox-red);">[ MODULE: C2_FRAMEWORK ]</span>
+                    <strong style="color: #fff;">NYTROXRAT_v1.1</strong>
                     <p style="font-size: 0.85em; margin-top: 10px;">C# .NET 9 Remote Monitoring & Control Framework.</p>
                 </a>
-                <div class="item-card writeup-btn" style="opacity: 0.5;">
-                    <span class="tag">[ STATUS: ARCHIVED ]</span>
-                    <strong>LEGACY_SERVICE_01</strong>
-                    <p style="font-size: 0.85em; margin-top: 10px;">Encrypted socket communication prototype.</p>
-                </div>
+                
+                <a href="venom.html" class="item-card writeup-btn venom-btn">
+                    <span class="tag" style="color: var(--venom-purple);">[ MODULE: OSINT_BREACH ]</span>
+                    <strong style="color: #fff;">VENOM_FRAMEWORK_v4.0</strong>
+                    <p style="font-size: 0.85em; margin-top: 10px;">Advanced OSINT Exposure & Breach Analysis Suite.</p>
+                </a>
             </div>
         </div>
     </section>
@@ -335,13 +339,7 @@
         }
 
         async function runLoader() {
-            const lines = [
-                "> INITIALIZING GHOSTPORT_OS...",
-                "> LOADING KERNEL MODULES...",
-                "> ESTABLISHING SECURE CONNECTION...",
-                "> BYPASSING FIREWALL...",
-                "> ACCESS GRANTED."
-            ];
+            const lines = ["> INITIALIZING GHOSTPORT_OS...", "> LOADING KERNEL MODULES...", "> ACCESS GRANTED."];
             const container = document.getElementById('loader-lines');
             for (let line of lines) {
                 const p = document.createElement('div');
@@ -351,6 +349,28 @@
                 await new Promise(r => setTimeout(r, 400));
             }
             document.getElementById('terminal-loader').style.display = 'none';
+        }
+
+        async function loadMediumLinks() {
+            const container = document.querySelector('#writeups .grid-layout');
+            try {
+                const response = await fetch('https://api.github.com/repos/umairballs/portofolio/contents/writeups');
+                const files = await response.json();
+                for (const file of files) {
+                    if (file.name.endsWith('.md')) {
+                        const raw = await fetch(file.download_url);
+                        const content = await raw.text();
+                        const title = content.match(/title: (.*)/)?.[1] || "UNTITLED";
+                        const url = content.match(/medium_url: (.*)/)?.[1] || "#";
+                        const desc = content.match(/description: (.*)/)?.[1] || "";
+                        container.innerHTML += `
+                            <a href="${url}" target="_blank" class="item-card writeup-btn">
+                                <span class="tag">[ RUN: ${title.replace(/['"]+/g, '').toUpperCase()} ]</span>
+                                <strong style="color: #fff;">${desc.replace(/['"]+/g, '')}</strong>
+                            </a>`;
+                    }
+                }
+            } catch (e) { console.log("Writeup error:", e); }
         }
 
         window.addEventListener('scroll', () => {
@@ -375,7 +395,7 @@
                 typedStates.aboutTitle = true; 
                 typeEffect(document.getElementById('about-title'), "ABOUT_ME", 60).then(() => {
                     typedStates.aboutBody = true;
-                    typeEffect(document.getElementById('about-typing'), "I am a motivated 14-year-old student with an intermediate-level understanding of cybersecurity and computer science, which I have been studying since the age of 8. I hold the CompTIA Security+ certification and regularly participate in Capture The Flag (CTF) competitions to develop practical problem-solving and security skills in a legal and ethical environment.", 20);
+                    typeEffect(document.getElementById('about-typing'), "I am a motivated 14-year-old student with an intermediate-level understanding of cybersecurity and computer science. I hold the CompTIA Security+ certification.", 20);
                 });
             }
             if (y > h*0.8 && !typedStates.projects) { 
@@ -393,6 +413,7 @@
             await typeEffect(document.getElementById('t-sub'), 'PENTESTER / SECURITY RESEARCHER/STUDENT', 60);
             document.getElementById('social-bar').style.opacity = "1";
             document.getElementById('contact-trigger').style.opacity = "1";
+            loadMediumLinks();
         };
         window.onresize = resize;
     </script>

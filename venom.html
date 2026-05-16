@@ -12,7 +12,7 @@
             --accent-dim: rgba(157, 0, 255, 0.3);
             --text: #e0b0ff;
             --border: rgba(157, 0, 255, 0.4);
-            --card-bg: rgba(15, 0, 25, 0.95);
+            --card-bg: rgba(15, 0, 25, 0.6);
         }
 
         * { box-sizing: border-box; }
@@ -24,13 +24,31 @@
             font-family: 'Courier New', monospace;
             overflow-x: hidden;
             line-height: 1.6;
+            cursor: none !important;
         }
+        a, button { cursor: none !important; }
+
+        .cursor-dot {
+            position: fixed; top: 0; left: 0; width: 6px; height: 6px; 
+            background: var(--accent); border-radius: 50%;
+            pointer-events: none; z-index: 999999; 
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--accent);
+        }
+        .cursor-outline {
+            position: fixed; top: 0; left: 0; width: 30px; height: 30px; 
+            border: 2px solid var(--accent); border-radius: 50%;
+            pointer-events: none; z-index: 999998; 
+            transform: translate(-50%, -50%); 
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+        .cursor-hovering { width: 60px; height: 60px; background: rgba(157, 0, 255, 0.1); backdrop-filter: blur(2px); }
 
         #venom-canvas {
             position: fixed;
             top: 0; left: 0;
             z-index: -1;
-            opacity: 0.4;
+            opacity: 0.6;
         }
 
         /* --- Animations --- */
@@ -59,14 +77,25 @@
             padding: 20px;
         }
 
+        .back-btn { 
+            position: fixed; top: 20px; left: 20px; color: var(--accent); text-decoration: none; z-index: 1000; 
+            font-weight: bold; padding: 8px 15px; border: 2px solid var(--accent); background: rgba(10,0,15,0.8);
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.2); backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 25px var(--accent); }
+
         .hero-header {
             border: 1px solid var(--border);
-            background: var(--card-bg);
+            border-top: 2px solid var(--accent);
+            background: rgba(15, 0, 25, 0.6);
+            backdrop-filter: blur(10px);
             padding: 50px;
-            border-radius: 4px;
+            border-radius: 8px;
             position: relative;
             overflow: hidden;
             margin-bottom: 30px;
+            margin-top: 50px;
             animation: pulse 4s infinite;
         }
 
@@ -96,6 +125,8 @@
             font-size: 12px;
             margin-bottom: 30px;
             border-left: 5px solid var(--accent);
+            backdrop-filter: blur(5px);
+            border-radius: 4px;
         }
 
         /* --- Content Blocks --- */
@@ -108,10 +139,21 @@
         .main-col, .side-col { display: flex; flex-direction: column; gap: 25px; }
 
         .widget {
-            background: rgba(20, 0, 35, 0.8);
+            background: rgba(15, 0, 25, 0.6);
             border: 1px solid var(--border);
+            border-top: 1px solid rgba(157, 0, 255, 0.6);
+            backdrop-filter: blur(10px);
             padding: 25px;
             position: relative;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+        }
+
+        .widget:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(157, 0, 255, 0.3);
         }
 
         .widget-title {
@@ -132,10 +174,11 @@
             height: 200px;
             overflow-y: hidden;
             font-size: 13px;
-            color: #8a2be2;
-            background: #000;
-            padding: 10px;
+            color: #d17bff;
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
             border: 1px solid #333;
+            border-radius: 4px;
         }
 
         /* --- Feature Cards --- */
@@ -147,37 +190,47 @@
 
         .f-item {
             padding: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(157,0,255,0.2);
             transition: 0.3s;
+            background: rgba(0,0,0,0.4);
+            border-radius: 4px;
         }
         .f-item:hover { border-color: var(--accent); background: rgba(157,0,255,0.1); }
 
         .stat-box { text-align: center; border-right: 1px solid var(--border); }
         .stat-box:last-child { border-right: none; }
-        .stat-val { font-size: 24px; color: #fff; display: block; }
-        .stat-lbl { font-size: 10px; text-transform: uppercase; }
+        .stat-val { font-size: 24px; color: #fff; display: block; text-shadow: 0 0 10px var(--accent); }
+        .stat-lbl { font-size: 10px; text-transform: uppercase; opacity: 0.8; }
 
         /* --- Buttons --- */
         .action-row { margin-top: 40px; display: flex; gap: 20px; }
         .btn-ghost {
             padding: 15px 30px;
-            border: 1px solid var(--accent);
-            color: var(--accent);
+            border: 2px solid var(--accent);
+            background: rgba(157, 0, 255, 0.1);
+            color: #fff;
             text-decoration: none;
             font-weight: bold;
             transition: 0.3s;
             flex: 1;
             text-align: center;
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
         }
-        .btn-ghost:hover { background: var(--accent); color: #fff; box-shadow: 0 0 20px var(--accent); }
+        .btn-ghost:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); transform: scale(1.02); }
     </style>
 </head>
 <body>
 
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
+
 <canvas id="venom-canvas"></canvas>
 
+<a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> RETURN_TO_BASE</a>
+
 <div class="container">
-    <div class="hero-header">
+    <div class="hero-header widget-tilt">
         <pre class="glitch-text" style="font-size: 8px; line-height: 1.2; animation: none;">
 ██╗   ██╗███████╗███╗   ██╗ ██████╗ ███╗   ███╗
 ██║   ██║██╔════╝████╗  ██║██╔═══██╗████╗ ████║
@@ -197,29 +250,29 @@
 
     <div class="dashboard-grid">
         <div class="main-col">
-            <div class="widget">
+            <div class="widget widget-tilt">
                 <div class="widget-title">Core Capability Matrix</div>
                 <div class="feature-list">
                     <div class="f-item">
-                        <strong>// EMAIL_RECON</strong>
+                        <strong style="color:var(--accent);">// EMAIL_RECON</strong>
                         <p style="font-size: 12px; margin: 5px 0;">DNS/SPF analysis, HIBP exposure, and reputation scoring via EmailRep.io.</p>
                     </div>
                     <div class="f-item">
-                        <strong>// USER_SWEEP</strong>
+                        <strong style="color:var(--accent);">// USER_SWEEP</strong>
                         <p style="font-size: 12px; margin: 5px 0;">Threaded lookup across 50+ social platforms (Reddit, GitHub, Telegram).</p>
                     </div>
                     <div class="f-item">
-                        <strong>// INFRA_RESOLVER</strong>
+                        <strong style="color:var(--accent);">// INFRA_RESOLVER</strong>
                         <p style="font-size: 12px; margin: 5px 0;">Shodan InternetDB integration, passive DNS, and WHOIS/RDAP lookup.</p>
                     </div>
                     <div class="f-item">
-                        <strong>// DATA_LEAK_INDEX</strong>
+                        <strong style="color:var(--accent);">// DATA_LEAK_INDEX</strong>
                         <p style="font-size: 12px; margin: 5px 0;">BreachDirectory integration for password hash and partial plaintext hints.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="widget">
+            <div class="widget widget-tilt">
                 <div class="widget-title">Operational Terminal Log</div>
                 <div class="terminal-log" id="log-box">
                     <div>[INFO] Initializing Venom modules...</div>
@@ -228,31 +281,31 @@
         </div>
 
         <div class="side-col">
-            <div class="widget">
+            <div class="widget widget-tilt">
                 <div class="widget-title">Engine Stats</div>
                 <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <div class="stat-box">
+                    <div class="stat-box" style="border: none; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
                         <span class="stat-val">25+</span>
                         <span class="stat-lbl">Aggregated APIs</span>
                     </div>
-                    <div class="stat-box">
+                    <div class="stat-box" style="border: none; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
                         <span class="stat-val">20</span>
                         <span class="stat-lbl">Concurrent Threads</span>
                     </div>
-                    <div class="stat-box">
+                    <div class="stat-box" style="border: none;">
                         <span class="stat-val">50+</span>
                         <span class="stat-lbl">Social Platforms</span>
                     </div>
                 </div>
             </div>
 
-            <div class="widget">
+            <div class="widget widget-tilt">
                 <div class="widget-title">System Requirements</div>
-                <ul style="font-size: 12px; list-style: none; padding: 0;">
-                    <li>- Python 3.8 or higher</li>
-                    <li>- Rich Library (Terminal UI)</li>
-                    <li>- Requests (API Handler)</li>
-                    <li>- 256MB RAM Minimum</li>
+                <ul style="font-size: 12px; list-style: none; padding: 0; color: #bbb;">
+                    <li style="margin-bottom: 5px;"><span style="color:var(--accent);">></span> Python 3.8 or higher</li>
+                    <li style="margin-bottom: 5px;"><span style="color:var(--accent);">></span> Rich Library (Terminal UI)</li>
+                    <li style="margin-bottom: 5px;"><span style="color:var(--accent);">></span> Requests (API Handler)</li>
+                    <li style="margin-bottom: 5px;"><span style="color:var(--accent);">></span> 256MB RAM Minimum</li>
                 </ul>
             </div>
         </div>
@@ -260,11 +313,34 @@
 
     <div class="action-row">
         <a href="https://github.com/ghostport-sudo/VENOM" class="btn-ghost"><i class="fab fa-github"></i> REPOSITORY_SRC</a>
-        <a href="index.html" class="btn-ghost" style="border-color: #555; color: #777;">EXIT_STATION</a>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 <script>
+    // Custom Cursor Setup
+    let mouseX = window.innerWidth/2, mouseY = window.innerHeight/2;
+    let outlineX = mouseX, outlineY = mouseY;
+    const cDot = document.querySelector('.cursor-dot');
+    const cOutline = document.querySelector('.cursor-outline');
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX; mouseY = e.clientY;
+    });
+
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.tagName === 'A' || e.target.closest('.f-item') || e.target.tagName === 'BUTTON') {
+            cOutline.classList.add('cursor-hovering');
+        }
+    });
+    document.addEventListener('mouseout', (e) => {
+        if (e.target.tagName === 'A' || e.target.closest('.f-item') || e.target.tagName === 'BUTTON') {
+            cOutline.classList.remove('cursor-hovering');
+        }
+    });
+
+    VanillaTilt.init(document.querySelectorAll(".widget-tilt"), { max: 2, speed: 400, glare: true, "max-glare": 0.05 });
+
     // Matrix Background
     const canvas = document.getElementById('venom-canvas');
     const ctx = canvas.getContext('2d');
@@ -276,7 +352,7 @@
     const drops = Array(Math.floor(columns)).fill(1);
 
     function drawMatrix() {
-        ctx.fillStyle = "rgba(3, 0, 5, 0.05)";
+        ctx.fillStyle = "rgba(3, 0, 5, 0.08)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#9d00ff";
         ctx.font = fontSize + "px monospace";
@@ -286,7 +362,19 @@
             if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
             drops[i]++;
         }
+
+        if(cDot && cOutline) {
+            cDot.style.left = mouseX + 'px';
+            cDot.style.top = mouseY + 'px';
+            outlineX += (mouseX - outlineX) * 0.2;
+            outlineY += (mouseY - outlineY) * 0.2;
+            cOutline.style.left = outlineX + 'px';
+            cOutline.style.top = outlineY + 'px';
+        }
+
+        requestAnimationFrame(drawMatrix);
     }
+    requestAnimationFrame(drawMatrix);
 
     // Terminal Emulator
     const logBox = document.getElementById('log-box');
@@ -303,7 +391,8 @@
     function addLog() {
         if (logIndex < logs.length) {
             const line = document.createElement('div');
-            line.textContent = logs[logIndex];
+            line.style.marginBottom = "5px";
+            line.innerHTML = `<span style="opacity:0.7">[${new Date().toLocaleTimeString()}]</span> ${logs[logIndex]}`;
             logBox.appendChild(line);
             logIndex++;
             setTimeout(addLog, 1200);
@@ -315,7 +404,6 @@
         document.getElementById('clock').textContent = new Date().toLocaleTimeString();
     }
 
-    setInterval(drawMatrix, 35);
     setInterval(updateClock, 1000);
     setTimeout(addLog, 1000);
     updateClock();

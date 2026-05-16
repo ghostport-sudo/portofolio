@@ -87,6 +87,20 @@
         #boot-log { color: var(--accent); font-size: 14px; line-height: 1.8; text-shadow: 0 0 5px var(--accent); }
 
         .license-box { margin-top: 50px; padding: 25px; border: 1px solid rgba(255,0,60,0.2); background: rgba(10,0,0,0.6); font-size: 0.85em; color: #888; border-radius: 8px; backdrop-filter: blur(5px); }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 768px) {
+            .container { padding: 20px; margin-top: 60px; }
+            .logo-container { width: 180px; height: 180px; margin: 20px auto; }
+            h1 { font-size: 1.5em !important; letter-spacing: 2px !important; }
+            p { font-size: 0.9em !important; letter-spacing: 1px !important; }
+            .grid { grid-template-columns: 1fr; gap: 15px; margin-top: 30px; }
+            .rat-card { padding: 20px; }
+            .github-btn { padding: 12px 25px; font-size: 0.9em; letter-spacing: 2px; }
+            .back-btn { font-size: 0.8em; padding: 6px 12px; }
+            .cursor-dot, .cursor-outline { display: none !important; }
+            body, a, button { cursor: auto !important; }
+        }
     </style>
 </head>
 <body>

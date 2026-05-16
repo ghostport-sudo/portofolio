@@ -188,14 +188,15 @@
             border-color: rgba(157, 0, 255, 0.8) !important;
         }
 
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--accent);
-        opacity: 0;
+        .item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            opacity: 0;
         }
 
         .item-card:hover::before {
@@ -618,6 +619,57 @@
         h2 {
             text-shadow: 0 0 10px var(--accent);
             transition: text-shadow 2s ease;
+        }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 768px) {
+            section {
+                padding: 40px 15px;
+                min-height: auto;
+            }
+            .profile-card, .content-box {
+                padding: 20px;
+                max-width: 100%;
+            }
+            .profile-img {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 15px;
+            }
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.4em; }
+            #t-sub { font-size: 0.9em; }
+            .grid-layout {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .socials {
+                gap: 20px;
+            }
+            .socials a {
+                font-size: 1.8em;
+            }
+            #activity-log {
+                width: 90%;
+                left: 5%;
+                bottom: 10px;
+                height: 110px;
+                font-size: 12px;
+            }
+            .cursor-dot, .cursor-outline {
+                display: none !important;
+            }
+            body, a, button {
+                cursor: auto !important;
+            }
+            #init-btn {
+                font-size: 1em;
+                padding: 15px 20px;
+            }
+            .scroll-reminder {
+                font-size: 0.8em;
+                bottom: 10px;
+            }
         }
     </style>
 </head>

@@ -218,6 +218,20 @@
             backdrop-filter: blur(5px);
         }
         .btn-ghost:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); transform: scale(1.02); }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 768px) {
+            .container { padding: 15px; margin-top: 60px; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .feature-list { grid-template-columns: 1fr; }
+            .hero-header { padding: 30px 15px; }
+            .glitch-text { font-size: 1.5em !important; }
+            pre.glitch-text { display: none; }
+            .status-bar { flex-direction: column; gap: 10px; font-size: 10px; }
+            .back-btn { font-size: 0.8em; padding: 6px 12px; }
+            .cursor-dot, .cursor-outline { display: none !important; }
+            body, a, button { cursor: auto !important; }
+        }
     </style>
 </head>
 <body>
